@@ -1,0 +1,70 @@
+import Body from '../components/body';
+import Vector from './vector';
+
+/**
+ * FORMULA: F = -k * x
+ */
+
+class Sketch {
+    constructor() {
+        this.previousDelta = 0;
+        this.fps = 60;
+
+        this.render(0);
+
+        this.linearMotion = new Body(document.querySelector('.linear'), 1);
+
+        this.restPosition = new Vector(100, 100);
+        this.stiffness = 0.08;
+        this.hookeForceVector = this.hookeForce();
+
+        this.dampingRatio = 0.7;
+        this.dampingForceVector = this.dampingForce();
+
+        window.addEventListener('mousemove', ({ clientX, clientY }) => {
+            this.restPosition.set(clientX, clientY);
+        });
+    }
+
+    hookeForce() {
+        // x = position - restPosition
+        // k = stiffness
+        // F = -k * x
+
+        const x = this.linearMotion.location.x - this.restPosition.x;
+        const y = this.linearMotion.location.y - this.restPosition.y;
+
+        const fx = -this.stiffness * x;
+        const fy = -this.stiffness * y;
+
+        return new Vector(fx, fy);
+    }
+
+    dampingForce() {
+        // F = -d * v
+
+        const d = this.dampingRatio;
+        const f = -d;
+
+        return new Vector(f, f);
+    }
+
+    render(currentDelta) {
+        requestAnimationFrame((c) => this.render(c));
+
+        const delta = currentDelta - this.previousDelta;
+
+        if (this.fps && delta < 1000 / this.fps) {
+            return;
+        }
+
+        this.linearMotion.acceleration.add(this.hookeForce());
+        this.linearMotion.velocity.scale(this.dampingRatio);
+
+        this.linearMotion.move();
+
+        this.previousDelta = currentDelta;
+    }
+}
+new Sketch();
+export default Sketch;

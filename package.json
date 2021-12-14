@@ -10,11 +10,17 @@
     "type": "git",
     "url": "git+https://github.com/NabilKharrich/scroller.git"
   },
+  "browserslist": [
+  "last 1 Chrome version"
+],
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/NabilKharrich/scroller/issues"
   },
-  "homepage": "https://github.com/NabilKharrich/scroller#readme"
+  "homepage": "https://github.com/NabilKharrich/scroller#readme",
+  "dependencies": {
+    "gsap": "^3.8.0"
+  }
 }
